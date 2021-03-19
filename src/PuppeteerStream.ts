@@ -1,6 +1,14 @@
-import puppeteer, { LaunchOptions, Browser, Page, BrowserOptions, ChromeArgOptions } from "puppeteer";
+import { LaunchOptions, Browser, Page, BrowserOptions, ChromeArgOptions } from "puppeteer";
 import { Readable, ReadableOptions } from "stream";
 import path from "path";
+
+// puppeteer-extra is a drop-in replacement for puppeteer,
+// it augments the installed puppeteer with plugin functionality
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+
+// add stealth plugin and use defaults (all evasion techniques)
+puppeteer.use(StealthPlugin())
 
 export class Stream extends Readable {
 	constructor(private page: Page, options?: ReadableOptions) {
@@ -60,6 +68,7 @@ export async function launch(opts: LaunchOptions & BrowserOptions & ChromeArgOpt
 
 	opts.headless = false;
 
+	// @ts-ignore
 	const browser: Browser = await puppeteer.launch(opts);
 	// @ts-ignore
 	browser.encoders = new Map();
